@@ -1,0 +1,16 @@
+[
+{
+  "modid": "thrownslime",
+  "name": "Thrown Slime",
+  "description": "This mod allows you to throw slime balls to cause slowness to enemies.",
+  "version": "1.2.0",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["LumberWizard"],
+  "credits": "Myself, and /u/MrWselwulf for the idea.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
