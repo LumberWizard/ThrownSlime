@@ -12,7 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -52,6 +55,13 @@ public class EventHandlers {
 				entityMagma.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
 				world.spawnEntity(entityMagma);
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void OnConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event){
+		if (event.getModID().equals(ModThrownSlime.MODID)) {
+			ConfigManager.sync(ModThrownSlime.MODID, Config.Type.INSTANCE);
 		}
 	}
 

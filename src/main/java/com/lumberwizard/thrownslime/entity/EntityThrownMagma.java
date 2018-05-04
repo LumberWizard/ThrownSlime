@@ -1,22 +1,25 @@
 package com.lumberwizard.thrownslime.entity;
 
-import com.lumberwizard.thrownslime.Config;
+import com.lumberwizard.thrownslime.ModConfig;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sun.security.krb5.Config;
 
-public class EntityThrownMagma extends EntitySnowball {
+public class EntityThrownMagma extends EntityThrownSlime {
 
-	public EntityThrownMagma(World worldIn) {
-		super(worldIn);
-	}
+    public EntityThrownMagma(World worldIn){
+        super(worldIn);
+    }
 
 	public EntityThrownMagma(World worldIn, EntityLivingBase throwerIn)
     {
@@ -44,13 +47,14 @@ public class EntityThrownMagma extends EntitySnowball {
     @Override
     protected void onImpact(RayTraceResult result)
     {
-        if (result.entityHit != null && !(result.entityHit instanceof EntityMagmaCube))
+        Entity entity = result.entityHit;
+        if (entity != null && !(entity instanceof EntityMagmaCube))
         {
-            int i = 0;
+            int i = entity instanceof EntitySnowman ? 3 : 0;
 
-            result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float)i);
-            if (result.entityHit instanceof EntityLivingBase && !world.isRemote && (this.getThrower() == null || !this.getThrower().isEntityEqual(result.entityHit))) {
-            	((EntityLivingBase) result.entityHit).setFire(Config.fireTime);;
+            entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float)i);
+            if (entity instanceof EntityLivingBase && !world.isRemote && (this.getThrower() == null || !this.getThrower().isEntityEqual(entity)) && (!(entity instanceof EntityPlayer) || ModConfig.affectCreative || !((EntityPlayer) entity).capabilities.isCreativeMode)) {
+            	entity.setFire(ModConfig.fireTime);
             }
         }
 
