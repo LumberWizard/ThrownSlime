@@ -1,18 +1,11 @@
 package com.lumberwizard.thrownslime.proxy;
 
-import com.lumberwizard.thrownslime.client.renderer.entity.RenderThrownMagma;
-import com.lumberwizard.thrownslime.client.renderer.entity.RenderThrownSlime;
 import com.lumberwizard.thrownslime.entity.EntityThrownMagma;
 import com.lumberwizard.thrownslime.entity.EntityThrownSlime;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleSpell;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.init.Items;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -37,8 +30,8 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerRenderers() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityThrownSlime.class, RenderThrownSlime.FACTORY);
-		RenderingRegistry.registerEntityRenderingHandler(EntityThrownMagma.class, RenderThrownMagma.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(EntityThrownSlime.class, renderManager -> new RenderSnowball<>(renderManager, Items.SLIME_BALL, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityThrownMagma.class, renderManager -> new RenderSnowball<>(renderManager, Items.MAGMA_CREAM, Minecraft.getMinecraft().getRenderItem()));
 	}
 
 }

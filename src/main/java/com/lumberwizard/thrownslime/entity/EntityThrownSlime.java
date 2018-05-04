@@ -1,12 +1,11 @@
 package com.lumberwizard.thrownslime.entity;
 
-import com.lumberwizard.thrownslime.Config;
-import com.lumberwizard.thrownslime.ModThrownSlime;
+import com.lumberwizard.thrownslime.ModConfig;
 
-import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -19,9 +18,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityThrownSlime extends EntitySnowball {
 
-	public EntityThrownSlime(World worldIn) {
-		super(worldIn);
-	}
+    public EntityThrownSlime(World worldIn){
+        super(worldIn);
+    }
 
 	public EntityThrownSlime(World worldIn, EntityLivingBase throwerIn)
     {
@@ -49,13 +48,15 @@ public class EntityThrownSlime extends EntitySnowball {
     @Override
     protected void onImpact(RayTraceResult result)
     {
-        if (result.entityHit != null && !(result.entityHit instanceof EntitySlime))
+        Entity entity = result.entityHit;
+        
+        if (entity != null && !(entity instanceof EntitySlime))
         {
             int i = 0;
 
-            result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float)i);
-            if (result.entityHit instanceof EntityLivingBase && !world.isRemote && (this.getThrower() == null || !this.getThrower().isEntityEqual(result.entityHit))) {
-            	((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionById(2), Config.slownessTime * 20, Config.level - 1));
+            entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), (float)i);
+            if (entity instanceof EntityLivingBase && !world.isRemote && (this.getThrower() == null || !this.getThrower().isEntityEqual(entity)) && (!(entity instanceof EntityPlayer) || ModConfig.affectCreative || !((EntityPlayer) entity).capabilities.isCreativeMode)) {
+            	((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionById(2), ModConfig.slownessTime * 20, ModConfig.level - 1));
             }
         }
 
