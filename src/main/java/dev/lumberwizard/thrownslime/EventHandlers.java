@@ -1,12 +1,11 @@
-package com.lumberwizard.thrownslime;
+package dev.lumberwizard.thrownslime;
 
 import java.util.Random;
 
-import com.lumberwizard.thrownslime.entity.EntityThrownMagma;
-import com.lumberwizard.thrownslime.entity.EntityThrownSlime;
+import org.apache.commons.lang3.tuple.Pair;
 
+import dev.lumberwizard.thrownslime.entity.EntityThrownSlime;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -29,8 +28,19 @@ public class EventHandlers {
 		ItemStack item = event.getItemStack();
 		EntityPlayer player = event.getEntityPlayer();
 		World world = event.getWorld();
-		if (!(item.getItem().equals(Items.SLIME_BALL) || item.getItem().equals(Items.MAGMA_CREAM)))
+		if (!ModThrownSlime.balls.contains(Pair.of(item.getItem(), item.getMetadata())))
 			return;
+
+		world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW,
+				SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+		if (!world.isRemote) {
+			ItemStack forSlime = item.copy();
+			forSlime.setCount(1);
+			EntityThrownSlime entitySlime = new EntityThrownSlime(world, player, forSlime);
+			entitySlime.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
+			world.spawnEntity(entitySlime);
+		}
 		if (!player.capabilities.isCreativeMode) {
 			item.shrink(1);
 			if (player.getHeldItemMainhand().isEmpty()) {
@@ -40,26 +50,10 @@ public class EventHandlers {
 				player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
 			}
 		}
-
-		world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW,
-				SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-		if (!world.isRemote) {
-			if (item.getItem().equals(Items.SLIME_BALL)) {
-				EntityThrownSlime entitySlime = new EntityThrownSlime(world, player);
-				entitySlime.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
-				world.spawnEntity(entitySlime);
-			}
-			else if (item.getItem().equals(Items.MAGMA_CREAM)) {
-				EntityThrownMagma entityMagma = new EntityThrownMagma(world, player);
-				entityMagma.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
-				world.spawnEntity(entityMagma);
-			}
-		}
 	}
 
 	@SubscribeEvent
-	public static void OnConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event){
+	public static void OnConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(ModThrownSlime.MODID)) {
 			ConfigManager.sync(ModThrownSlime.MODID, Config.Type.INSTANCE);
 		}
