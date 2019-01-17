@@ -9,14 +9,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 @Mod.EventBusSubscriber
 public class EventHandlers {
@@ -50,6 +54,12 @@ public class EventHandlers {
 				player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void registerEntites(RegistryEvent.Register<EntityEntry> event) {
+		EntityRegistry.registerModEntity(new ResourceLocation("thrownslime:thrown_slime"), EntityThrownSlime.class,
+				"thrown_slime", 1, ModThrownSlime.instance, 64, 10, true);
 	}
 
 	@SubscribeEvent

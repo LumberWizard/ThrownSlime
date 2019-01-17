@@ -92,7 +92,7 @@ public class EntityThrownSlime extends EntitySnowball {
 						i = 3;
 					}
 				}
-				if (Loader.isModLoaded("industrialforegoing") && item == ObjectHolders.pinkSlime) {
+				if (Loader.isModLoaded("industrialforegoing") && item == ObjectHolders.PINK_SLIME) {
 					((EntityLivingBase) entity).addPotionEffect(
 							new PotionEffect(MobEffects.GLOWING, ModConfig.effectTime * 20, ModConfig.level - 1));
 				}
