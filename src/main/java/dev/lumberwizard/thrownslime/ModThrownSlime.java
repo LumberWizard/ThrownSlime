@@ -1,7 +1,7 @@
 package dev.lumberwizard.thrownslime;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 @Mod(name = ModThrownSlime.MOD_NAME, modid = ModThrownSlime.MODID, version = ModThrownSlime.VERSION)
 public class ModThrownSlime {
@@ -30,11 +31,10 @@ public class ModThrownSlime {
 
 	public static Logger logger;
 
-	public static List<Pair<Item, Integer>> balls = new ArrayList<Pair<Item, Integer>>();
+	public static Set<Pair<Item, Integer>> balls = new HashSet<Pair<Item, Integer>>();
 
 	@Mod.Instance
 	public static ModThrownSlime instance;
-
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -43,10 +43,10 @@ public class ModThrownSlime {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		ModThrownSlime.balls.add(Pair.of(Items.SLIME_BALL, 0));
-		ModThrownSlime.balls.add(Pair.of(Items.MAGMA_CREAM, 0));
+		balls.add(Pair.of(Items.SLIME_BALL, 0));
+		balls.add(Pair.of(Items.MAGMA_CREAM, 0));
 		if (Loader.isModLoaded("industrialforegoing")) {
-			ModThrownSlime.balls.add(Pair.of(ObjectHolders.PINK_SLIME, 0));
+			balls.add(Pair.of(PINK_SLIME, 0));
 		}
 		registerDispenserBehaviors();
 	}
@@ -65,15 +65,19 @@ public class ModThrownSlime {
 			}
 		});
 		if (Loader.isModLoaded("industrialforegoing")) {
-			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ObjectHolders.PINK_SLIME,
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(PINK_SLIME,
 					new BehaviorProjectileDispense() {
 						protected IProjectile getProjectileEntity(World worldIn, IPosition position,
 								ItemStack stackIn) {
 							return new EntityThrownSlime(worldIn, position.getX(), position.getY(), position.getZ(),
-									new ItemStack(ObjectHolders.PINK_SLIME));
+									new ItemStack(PINK_SLIME));
 						}
 					});
 		}
+		
 	}
+	
+	@ObjectHolder("industrialforegoing:pink_slime")
+	public static final Item PINK_SLIME = null;
 
 }

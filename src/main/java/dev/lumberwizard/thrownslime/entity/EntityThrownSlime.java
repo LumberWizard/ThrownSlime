@@ -1,7 +1,7 @@
 package dev.lumberwizard.thrownslime.entity;
 
 import dev.lumberwizard.thrownslime.ModConfig;
-import dev.lumberwizard.thrownslime.ObjectHolders;
+import dev.lumberwizard.thrownslime.ModThrownSlime;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySlime;
@@ -92,7 +92,7 @@ public class EntityThrownSlime extends EntitySnowball {
 						i = 3;
 					}
 				}
-				if (Loader.isModLoaded("industrialforegoing") && item == ObjectHolders.PINK_SLIME) {
+				if (Loader.isModLoaded("industrialforegoing") && item == ModThrownSlime.PINK_SLIME) {
 					((EntityLivingBase) entity).addPotionEffect(
 							new PotionEffect(MobEffects.GLOWING, ModConfig.effectTime * 20, ModConfig.level - 1));
 				}
