@@ -3,7 +3,7 @@
   "modid": "thrownslime",
   "name": "Thrown Slime",
   "description": "This mod allows you to throw slime balls to cause slowness or other debuffs to enemies.",
-  "version": "2.0.0",
+  "version": "1.3.0",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
